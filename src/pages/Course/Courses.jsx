@@ -1,10 +1,20 @@
-import React from "react";
+import React, { useEffect } from 'react';
 
-import "./Course.css";
-import CourseBox from "../../components/CourseBox/CourseBox";
-import { Link } from "react-router-dom";
+import './Course.css';
+import CourseBox from '../../components/CourseBox/CourseBox';
+import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { getCoursesFormServer } from '../../Redux/reducers/CourseReducer';
 
 export default function Courses() {
+  const dispatch = useDispatch();
+  const courses = useSelector((state) => state.course);
+  console.log(courses);
+  useEffect(() => {
+    dispatch(
+      getCoursesFormServer('https://redux-cms.iran.liara.run/api/courses')
+    );
+  }, []);
   return (
     <div class="col-8 content px-0">
       <div class="content__wrapper d-flex flex-column align-content-between">
@@ -38,8 +48,9 @@ export default function Courses() {
 
         <div class="products products-container">
           <div class="products__list products-wrapper">
-            <CourseBox />
-            <CourseBox />
+            {courses.map((course) => (
+              <CourseBox key={course.id} {...course} />
+            ))}
           </div>
         </div>
 
@@ -47,22 +58,19 @@ export default function Courses() {
           <button
             class="btn-custome btn-custome__blue"
             data-bs-toggle="modal"
-            data-bs-target="#new-product"
-          >
+            data-bs-target="#new-product">
             افزودن دوره جدید
           </button>
           <button
             class="btn-custome btn-custome__red"
             data-bs-toggle="modal"
-            data-bs-target="#add-discount-all-product"
-          >
+            data-bs-target="#add-discount-all-product">
             اعمال تخفیف همه دوره‌ها
           </button>
           <button
             class="btn-custome btn-custome__green btn-modal-new-category"
             data-bs-toggle="modal"
-            data-bs-target="#add-new-category"
-          >
+            data-bs-target="#add-new-category">
             افزودن دسته بندی
           </button>
         </div>

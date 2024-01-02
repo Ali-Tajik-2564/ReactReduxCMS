@@ -1,8 +1,18 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './Article.css';
 import ArticleBox from '../../components/ArticleBox/ArticleBox';
+import { useDispatch, useSelector } from 'react-redux';
+import { getArticlesFormServer } from '../../Redux/reducers/ArticleReducer';
+
 export default function Articles() {
+  const dispatch = useDispatch();
+  const articles = useSelector((state) => state.article);
+  useEffect(() => {
+    dispatch(
+      getArticlesFormServer('https://redux-cms.iran.liara.run/api/articles')
+    );
+  }, []);
   return (
     <div class="col-8 content px-0">
       <div class="content__wrapper d-flex flex-column align-content-between">
@@ -36,8 +46,9 @@ export default function Articles() {
 
         <div class="articles">
           <div class="articles__list">
-            <ArticleBox />
-            <ArticleBox />
+            {articles.map((article) => (
+              <ArticleBox key={article.id} {...article} />
+            ))}
           </div>
         </div>
 

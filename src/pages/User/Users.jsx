@@ -1,8 +1,20 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './User.css';
 import { Link } from 'react-router-dom';
 import UserItem from '../../components/UserItem/UserItem';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  RemoveUsersFormServer,
+  getUsersFormServer,
+} from '../../Redux/reducers/UserReducer';
+import swal from 'sweetalert';
 export default function Users() {
+  const dispatch = useDispatch();
+  const users = useSelector((state) => state.user);
+  useEffect(() => {
+    dispatch(getUsersFormServer('https://redux-cms.iran.liara.run/api/users/'));
+  }, []);
+
   return (
     <div class="col-8 content px-0">
       <div class="content__wrapper">
@@ -55,9 +67,9 @@ export default function Users() {
 
           <div class="users__list-container">
             <div class="users__list users__list-wrapper">
-              <UserItem />
-              <UserItem />
-              <UserItem />
+              {users.map((user) => (
+                <UserItem key={user.id} {...user} />
+              ))}
             </div>
           </div>
         </div>
